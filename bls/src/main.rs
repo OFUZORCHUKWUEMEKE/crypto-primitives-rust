@@ -1,6 +1,7 @@
+mod aggregate;
+mod bls;
 mod groups;
 mod pairings;
-mod bls;
 
 fn main() {
     println!("╔══════════════════════════════════════╗");
@@ -34,4 +35,22 @@ fn main() {
 
     pairings::preview_bls_equation();
     println!();
+
+    println!("\n╔══════════════════════════════════════╗");
+    println!("║   Part 3: BLS Sign and Verify        ║");
+    println!("╚══════════════════════════════════════╝\n");
+    let message = b"Hello, zero-knowledge world!";
+    println!(
+        "Message to sign: '{:?}'",
+        std::str::from_utf8(message).unwrap()
+    );
+    // 1. Keygen
+    let (sk, pk) = bls::keygen();
+    println!("Keys generated!");
+    // 2. Sign
+    let sig = bls::sign(&sk, message);
+    println!("Message signed!");
+    // 3. Verify
+    let is_valid = bls::verify(&pk, message, &sig);
+    println!("Signature valid? {}", is_valid);
 }
