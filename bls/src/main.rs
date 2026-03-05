@@ -1,5 +1,6 @@
 mod groups;
 mod pairings;
+mod bls;
 
 fn main() {
     println!("╔══════════════════════════════════════╗");
