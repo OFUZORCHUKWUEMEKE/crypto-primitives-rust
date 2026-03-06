@@ -1,6 +1,6 @@
 # 🔐 crypto-primitives-rust
 
-Building cryptographic primitives from scratch in Rust — ECC, BLS signatures, pairings, and zero-knowledge proof building blocks. **Strictly for learning.**
+Building cryptographic primitives from scratch in Rust — ECC, BLS signatures, pairings, Pedersen commitments, and zero-knowledge proof building blocks. **Strictly for learning.**
 
 > ⚠️ **DO NOT USE IN PRODUCTION.** This code is educational only. It has not been audited, is not constant-time, and is not secure for any real-world application.
 
@@ -23,35 +23,32 @@ A ground-up implementation of ECC **without any external crypto libraries**. Eve
 
 ---
 
-### 📁 [`bls/`](bls/) — BLS Signatures & Pairings
+### 📁 [`bls/`](bls/) — BLS Signatures & Pairings ✅
 
-Exploring **pairing-based cryptography** using the [arkworks](https://github.com/arkworks-rs) library for the BLS12-381 curve. The focus is on understanding *how pairings work* and *why BLS signatures are special*.
+Pairing-based cryptography using [arkworks](https://github.com/arkworks-rs) on BLS12-381.
 
-#### ✅ Part 1 — Exploring the Groups ([`groups.rs`](bls/src/groups.rs))
+| Part | File | What it covers |
+|------|------|---------------|
+| 1 | [`groups.rs`](bls/src/groups.rs) | G₁/G₂ generators, scalar multiplication, identity |
+| 2 | [`pairings.rs`](bls/src/pairings.rs) | Bilinear pairing `e(P,Q)`, bilinearity, non-degeneracy |
+| 3 | [`bls.rs`](bls/src/bls.rs) | `keygen`, `sign`, `verify` via `e(σ, G₂) == e(H(m), pk)` |
+| 4–5 | [`aggregate.rs`](bls/src/aggregate.rs) | Aggregate N signatures → 1, size comparison |
 
-Hands-on exploration of G₁, G₂, and the scalar field Fr.
+**Ethereum context**: Ethereum PoS uses BLS12-381 for validator attestations — 1M signatures collapsed into one 96-byte signature.
 
-| Function | What it demonstrates |
-|----------|---------------------|
-| `explore_generators()` | G₁ and G₂ generator points, group order |
-| `explore_scalar_multiplication()` | Core `k * P` operation, group law verification |
-| `explore_random_scalars()` | Random key generation with `Fr::rand()` |
-| `explore_identity()` | Point at infinity — the "zero" of the group |
+---
 
-#### ✅ Part 2 — Understanding the Pairing ([`pairings.rs`](bls/src/pairings.rs))
+### 📁 [`pedersen-commitment/`](pedersen-commitment/) — Pedersen Commitments ✅
 
-Exploring the bilinear map `e: G₁ × G₂ → Gₜ` and proving its properties.
+Commit to a secret value without revealing it: `C = v·G + r·H`.
 
-| Function | What it demonstrates |
-|----------|---------------------|
-| `explore_basic_pairing()` | First pairing call — what Gₜ looks like |
-| `verify_bilinearity()` | Proof that `e(aP, bQ) = e(P, Q)^(ab)` |
-| `verify_non_degeneracy()` | Pairing produces meaningful, distinct outputs |
-| `preview_bls_equation()` | Full BLS verification: `e(σ, G₂) == e(H(m), pk)` |
+| Part | File | What it covers |
+|------|------|---------------|
+| 1 | [`generator.rs`](pedersen-commitment/src/generator.rs) | G (standard) and H (hash-derived), why independence matters |
+| 2 | [`commit.rs`](pedersen-commitment/src/commit.rs) | `commit(v, r)`, `verify(v, r, C)`, hiding & binding demos |
+| 3 | [`homomorphic.rs`](pedersen-commitment/src/homomorphic.rs) | `C1 + C2 = Commit(v1+v2, r1+r2)`, balance proofs |
 
-#### 🔲 Part 3 — BLS Sign & Verify (coming next)
-#### 🔲 Part 4 — Signature Aggregation
-#### 🔲 Part 5 — Full Demo
+**Real-world use**: Monero (hidden amounts), Mimblewimble, Bulletproofs, ZK-SNARKs.
 
 ---
 
@@ -64,6 +61,10 @@ cd ecc && cargo test
 # Run BLS project
 cd bls && cargo run      # see all demonstrations
 cd bls && cargo test     # run unit tests
+
+# Run Pedersen Commitment project
+cd pedersen-commitment && cargo run # see demonstration
+cd pedersen-commitment && cargo test # run unit tests
 ```
 
 ---
@@ -72,12 +73,10 @@ cd bls && cargo test     # run unit tests
 
 ```
 ECC (from scratch) ✅
- └──▶ BLS Signatures (in progress) 🔧
-       └──▶ KZG Polynomial Commitments
-             └──▶ PLONK (ZK-SNARK)
- └──▶ Pedersen Commitments
- └──▶ Schnorr Signatures
-       └──▶ Sigma Protocols
+ └──▶ BLS Signatures & Aggregation ✅
+       └──▶ Pedersen Commitments ✅
+             └──▶ Polynomial Commitments (KZG / IPA) 🔲
+                   └──▶ ZK-SNARKs (PLONK / Groth16) 🔲
 ```
 
 ---
