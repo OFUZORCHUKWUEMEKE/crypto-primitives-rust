@@ -1,7 +1,4 @@
 use ark_bls12_381::{Fr, G1Projective};
-use ark_ff::PrimeField;
-use ark_std::UniformRand;
-
 use crate::generator;
 
 /// Commits to a value `v` with blinding factor `r`.
