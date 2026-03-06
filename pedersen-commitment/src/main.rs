@@ -1,6 +1,7 @@
 mod commit;
 mod generator;
 mod homomorphic;
+mod confidential;
 fn main() {
    
     generator::explore_generators();
@@ -16,6 +17,9 @@ fn main() {
     homomorphic::explore_addition();
     println!();
     homomorphic::explore_subtraction();
+    println!();
+
+    confidential::explore_confidential_transfers();
     println!();
 
     println!("   • C1 + C2 = Commit(v1+v2, r1+r2) — add hidden values");
