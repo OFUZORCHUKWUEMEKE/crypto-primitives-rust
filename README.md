@@ -79,8 +79,3 @@ ECC (from scratch) ✅
                    └──▶ ZK-SNARKs (PLONK / Groth16) 🔲
 ```
 
----
-
-## License
-
-MIT License
