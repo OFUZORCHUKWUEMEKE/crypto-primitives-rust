@@ -3,8 +3,7 @@ use ark_ec::CurveGroup;
 use ark_std::UniformRand;
 
 use crate::commit;
-use crate::commit::commit;
-use crate::generator;
+
 
 /// A confidential account: balance is hidden inside a Pedersen commitment.
 /// Only the owner knows (balance, blinding_factor).
