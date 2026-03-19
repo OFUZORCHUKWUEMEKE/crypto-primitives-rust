@@ -209,7 +209,7 @@ impl<F: Field> MultilinearPolynomial<F> {
                 //
                 // Interpolate: (1 - r) · f(…,0,…) + r · f(…,1,…)
                 let val = (F::one() - r) * evals[j] + *r * evals[j + half];
-                new_evals.push(val);
+                new_evals.push(val); 
             }
 
             evals = new_evals;

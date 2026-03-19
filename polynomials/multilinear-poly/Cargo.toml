@@ -1,0 +1,11 @@
+[package]
+name = "multilinear-poly"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+ark-ff = "0.5"
+thiserror = "2"
+
+[dev-dependencies]
+ark-bn254 = "0.5"
